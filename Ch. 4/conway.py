@@ -2,7 +2,6 @@
 # Conway's Game of Life
 
 import random, time, copy
-
 WIDTH = 60
 HEIGHT = 20
 
@@ -19,7 +18,7 @@ for x in range(WIDTH):
 
 while True: # Main program loop.
     print('\n\n\n\n\n') # Separate each step with newlines.
-    currentCells = copy.deepycopy(nextCells)
+    currentCells = copy.deepcopy(nextCells)
 
     # Print currentCells on the screen:
     for y in range(HEIGHT):
@@ -35,6 +34,7 @@ while True: # Main program loop.
             leftCoord  = (x - 1) % WIDTH
             rightCoord = (x + 1) % WIDTH
             aboveCoord = (y - 1) % HEIGHT
+            belowCoord = (y + 1) % HEIGHT
 
             # Count number of living neighbors:
             numNeighbors = 0
@@ -51,4 +51,19 @@ while True: # Main program loop.
             if currentCells[leftCoord][belowCoord] == '#':
                 numNeighbors += 1 # Bottom-left neighbor is alive.
             if currentCells[x][belowCoord] == '#':
+                numNeighbors += 1 # Bottom neighbor is alive.
+            if currentCells[rightCoord][belowCoord] == '#':
+                numNeighbors += 1 # Bottom-right neighbor is alive.
 
+            # Set cell based on Conway's Game of Life rules:
+            if currentCells[x][y] == '#' and (numNeighbors ==2 or
+numNeighbors == 3):
+                # Living cells with 2 or 3 neighbors stay alive:
+                nextCells[x][y] = '#'
+            elif currentCells[x][y] == ' ' and numNeighbors == 3:
+                # Dead cells with 3 neighbors become alive:
+                nextCells[x][y] = '#'
+            else:
+                # Everything else dies or stays dead:
+                nextCells[x][y] = ' '
+    time.sleep(1) # Add a 1-second pause to reduce flickering.
